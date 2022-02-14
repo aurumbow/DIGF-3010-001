@@ -1,0 +1,70 @@
+#include <Adafruit_CircuitPlayground.h>
+#include <Adafruit_Circuit_Playground.h>
+
+int wireTouch;
+int initbrtns = 50;
+int brtns = initbrtns;
+
+void setup() {
+  // put your setup code here, to run once:
+   CircuitPlayground.begin();
+   Serial.begin(9600);
+   pinMode(10, INPUT_PULLUP);
+   CircuitPlayground.setBrightness(brtns);
+   CircuitPlayground.clearPixels();
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+  wireTouch = digitalRead(10);
+  //Serial.print(wireTouch);
+
+  if (wireTouch == 0){
+
+    for (int i =  0; i <= 70; i++){
+    CircuitPlayground.setPixelColor(9,CircuitPlayground.colorWheel(220));
+    CircuitPlayground.setPixelColor(8,CircuitPlayground.colorWheel(240));
+    CircuitPlayground.setPixelColor(7,CircuitPlayground.colorWheel(220));
+    CircuitPlayground.setPixelColor(6,CircuitPlayground.colorWheel(240));
+    CircuitPlayground.setPixelColor(5,CircuitPlayground.colorWheel(220));
+    
+      CircuitPlayground.setBrightness(brtns);
+      if (brtns > 0){
+        brtns = brtns - 1;
+        Serial.println(brtns);
+      }
+      delay(10);
+      if (i == 70){
+        brtns = initbrtns;
+        Serial.println(brtns);
+        CircuitPlayground.clearPixels();
+      }
+    }
+
+
+    for (int i =  0; i <= 70; i++){
+    CircuitPlayground.setPixelColor(4,CircuitPlayground.colorWheel(250));
+    CircuitPlayground.setPixelColor(3,CircuitPlayground.colorWheel(240));
+    CircuitPlayground.setPixelColor(2,CircuitPlayground.colorWheel(250));
+    CircuitPlayground.setPixelColor(1,CircuitPlayground.colorWheel(240));
+    CircuitPlayground.setPixelColor(0,CircuitPlayground.colorWheel(250));
+  
+    CircuitPlayground.setBrightness(brtns);
+      if (brtns > 0){
+        brtns = brtns - 1;
+        Serial.println(brtns);
+      }
+      delay(10);
+      if (i == 70){
+        brtns = initbrtns;
+        Serial.println(brtns);
+        CircuitPlayground.clearPixels();
+      }
+   }
+  }
+
+  else {
+    CircuitPlayground.clearPixels();
+    }
+  }
