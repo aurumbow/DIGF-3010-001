@@ -1,0 +1,56 @@
+#include <Adafruit_CircuitPlayground.h>
+
+float newX, newY, newZ;
+float prevX, prevY, prevZ = 0.0;
+float temp, basetemp;
+int tempBright;
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  CircuitPlayground.begin();
+  basetemp = CircuitPlayground.temperature();
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  newX = CircuitPlayground.motionX();
+  newY = CircuitPlayground.motionY();
+  newZ = CircuitPlayground.motionZ();
+  temp = CircuitPlayground.temperature();
+  
+
+  Serial.print("X: ");
+  Serial.print(newX-prevX);
+  Serial.print("  Y: ");
+  Serial.print(newY-prevY);
+  Serial.print("  Z: ");
+  Serial.print(newZ-prevZ);
+  Serial.print(" T: ");
+  Serial.println(temp-basetemp);
+
+  CircuitPlayground.playTone(((abs(newX-prevX)*10)),50);
+  CircuitPlayground.playTone(((abs(newY-prevY)*10)),50);
+  CircuitPlayground.playTone(((abs(newZ-prevZ)*10)),50);
+
+  tempBright = map(temp, basetemp, 100.0, 0, 255);
+  
+  CircuitPlayground.setBrightness(tempBright);
+
+  CircuitPlayground.setPixelColor(0, 255, 0, 0);
+  CircuitPlayground.setPixelColor(1, 255, 0, 0);
+  CircuitPlayground.setPixelColor(2, 255, 0, 0);
+  CircuitPlayground.setPixelColor(3, 255, 0, 0);
+  CircuitPlayground.setPixelColor(4, 255, 0, 0);
+  CircuitPlayground.setPixelColor(5, 255, 0, 0);
+  CircuitPlayground.setPixelColor(6, 255, 0, 0);
+  CircuitPlayground.setPixelColor(7, 255, 0, 0);
+  CircuitPlayground.setPixelColor(8, 255, 0, 0);
+  CircuitPlayground.setPixelColor(9, 255, 0, 0);
+
+  prevX = newX;
+  prevY = newY;
+  prevZ = newZ;
+
+  delay(500);
+}
