@@ -1,0 +1,56 @@
+#include <Adafruit_CircuitPlayground.h>
+#include <Servo.h>
+
+float value;
+Servo myServo;
+float loudness;
+bool leftButtonPressed;
+bool rightButtonPressed;
+
+void setup() {
+  Serial.begin(9600);
+  CircuitPlayground.begin();
+  myServo.attach(10);
+
+  //set threshold to average volume in the room
+  loudness = CircuitPlayground.mic.soundPressureLevel(500);
+}
+
+void loop() {
+  
+  leftButtonPressed = CircuitPlayground.leftButton();
+  rightButtonPressed = CircuitPlayground.rightButton();
+  
+  // Take 10 milliseconds of sound data to calculate
+  value = CircuitPlayground.mic.soundPressureLevel(10);
+  
+  Serial.print("Sound Sensor SPL: ");
+  Serial.println(value);
+
+  //when its too loud, lift the scarf
+  if (value > loudness){
+    myServo.write(90);
+  } else {
+    myServo.write(0);
+  }
+
+  //use buttons to allow wearer to adjust activation volume according to comfort level
+  Serial.print("Left Button: ");
+  if (leftButtonPressed) {
+    loudness = loudness - 20;
+    Serial.print("DOWN");
+  } else {
+    Serial.print("  UP");
+  }
+  Serial.print("   Right Button: ");
+  if (rightButtonPressed) {
+    loudness =  loudness + 20;
+    Serial.print("DOWN");
+  } else {
+    Serial.print("  UP");    
+  }
+  Serial.println();
+  Serial.println(loudness);
+
+  delay(90);
+}
